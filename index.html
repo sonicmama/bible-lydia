@@ -31,7 +31,6 @@
   --accent:#E0A719;
   --num:#C05A1A;           /* 숫자: 진하고 차분한 오렌지 */
   --lab:#3B3427;           /* 라벨: 진한 먹색 */
-  --ribbon:#C1502E;
   --shadow:0 2px 10px rgba(96,78,32,.08);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -45,25 +44,36 @@ body{
   background-image:radial-gradient(ellipse at 50% 0%, rgba(255,241,178,.55), transparent 60%);
   -webkit-user-select:none;user-select:none;
 }
-body.bigtext{font-size:21px}
-body.bigtext .book-name{font-size:1.2rem}
-body.bigtext .chip-year{font-size:1.15rem}
+input{-webkit-user-select:text;user-select:text}
+/* 큰 글씨: 최상위(html) 글자 기준을 키워 rem 단위 전체가 함께 커짐 */
+html.bigtext{font-size:22px}
+html.bigtext .ch{height:50px}
+html.bigtext .btn-plus{width:56px;height:56px}
+html.bigtext .btn-minus{width:42px;height:42px}
 
 /* ---------- header ---------- */
 header{padding:24px 16px 12px;text-align:center;position:relative}
-.hero{display:flex;justify-content:center;margin-bottom:6px}
+.hero{display:flex;justify-content:center;margin-bottom:8px}
+.bible-hero{
+  width:128px;height:104px;display:block;
+  animation:bob 3.2s ease-in-out infinite;transform-origin:50% 95%;
+  filter:drop-shadow(0 4px 8px rgba(96,78,32,.16));
+}
+@keyframes bob{0%,100%{transform:rotate(0deg) translateY(0)}30%{transform:rotate(-1deg) translateY(-2px)}70%{transform:rotate(1deg) translateY(-1px)}}
+.pf{transform-origin:64px 78px;animation:flip 3.2s ease-in-out infinite}
+@keyframes flip{0%,58%,100%{transform:scaleX(1)}72%{transform:scaleX(-.2)}86%{transform:scaleX(.93)}}
+.spark{animation:tw 3.2s ease-in-out infinite;transform-origin:center}
+.spark.s2{animation-delay:1.6s}
+@keyframes tw{0%,60%,100%{opacity:0;transform:scale(.5)}72%{opacity:1;transform:scale(1.1)}86%{opacity:.4;transform:scale(.9)}}
+@media (prefers-reduced-motion: reduce){.bible-hero,.pf,.spark{animation:none}.spark{opacity:.6}}
 .char-wrap{position:relative;width:150px;height:150px}
 .char{
   width:150px;height:150px;display:block;
-  animation:bob 2.4s ease-in-out infinite;transform-origin:50% 95%;
-  filter:drop-shadow(0 4px 8px rgba(96,78,32,.18));
+  animation:bob 2.6s ease-in-out infinite;transform-origin:50% 95%;
+  filter:drop-shadow(0 4px 8px rgba(96,78,32,.16));
 }
-@keyframes bob{0%,100%{transform:rotate(0deg) translateY(0)}30%{transform:rotate(-1.2deg) translateY(-2px)}70%{transform:rotate(1.2deg) translateY(-1px)}}
 .heart-layer{position:absolute;inset:0;pointer-events:none;overflow:visible}
-.heart{
-  position:absolute;font-size:0;width:16px;height:16px;
-  animation:heartfly 1.15s ease-out forwards;
-}
+.heart{position:absolute;font-size:0;width:16px;height:16px;animation:heartfly 1.15s ease-out forwards}
 .heart svg{width:100%;height:100%;display:block}
 @keyframes heartfly{
   0%{opacity:0;transform:translate(0,0) scale(.5)}
@@ -71,26 +81,40 @@ header{padding:24px 16px 12px;text-align:center;position:relative}
   100%{opacity:0;transform:translate(26px,-52px) scale(1.15)}
 }
 @media (prefers-reduced-motion: reduce){.char{animation:none}.heart{animation-duration:.01s;opacity:0}}
-h1{font-size:1.5rem;font-weight:700;letter-spacing:.12em}
+h1{font-size:1.45rem;font-weight:700;letter-spacing:.1em}
 .subtitle{font-size:.78rem;color:var(--ink-soft);letter-spacing:.28em;margin-top:3px}
 .year-line{margin-top:8px;color:var(--lab);font-size:.92rem;letter-spacing:.02em;font-family:'Noto Sans KR',sans-serif;font-weight:600}
-.year-line b.ot-c,.year-line b.nt-c,.year-line b.y-c{color:var(--num);font-weight:700}
+.year-line b{color:var(--num);font-weight:700}
 .top-banner{
   margin:12px 16px 0;padding:12px 15px;border-radius:12px;
   background:#FFF3C4;border:1px solid #EDD57E;color:#8A6C10;
-  font-size:.88rem;line-height:1.6;display:none;
+  font-size:.88rem;line-height:1.6;display:none;font-family:'Noto Sans KR',sans-serif;
 }
 .top-banner.alert{background:#FBEAE4;border-color:#E3B49F;color:#8A4326}
 
-/* reading now banner */
-.reading-now{
+/* ---------- 이어 읽기 카드 ---------- */
+.cont-card{
   margin:12px 16px 0;background:var(--card);border:1px solid var(--line);
-  border-radius:12px;padding:11px 15px;display:flex;align-items:center;gap:11px;
-  box-shadow:var(--shadow);font-size:1rem;
+  border-radius:13px;padding:13px 15px 6px;box-shadow:var(--shadow);
 }
-.reading-now .rn-label{color:var(--ink-soft);font-size:.82rem;letter-spacing:.1em}
-.reading-now .rn-book{font-weight:700}
-.reading-now.hidden{display:none}
+.cont-card.hidden{display:none}
+.cont-title{
+  font-size:.8rem;color:var(--ink-soft);letter-spacing:.2em;
+  display:flex;align-items:center;gap:8px;padding-bottom:9px;
+}
+.cont-title svg{flex:none}
+.cont-row{
+  display:flex;align-items:center;gap:10px;padding:10px 0;
+  border-top:1px dashed var(--line);cursor:pointer;
+}
+.cont-book{font-weight:700;font-size:1rem;flex:none}
+.cont-info{font-family:'Noto Sans KR',sans-serif;font-size:.8rem;color:var(--ink-soft);flex:1;font-weight:500}
+.cont-next{
+  font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:.85rem;
+  padding:7px 12px;border-radius:10px;flex:none;color:var(--num);
+}
+.cont-next.n-ot{background:var(--ot-soft);border:1px solid var(--ot-line)}
+.cont-next.n-nt{background:var(--nt-soft);border:1px solid var(--nt-line)}
 
 /* ---------- tabs ---------- */
 nav.tabs{
@@ -125,15 +149,27 @@ main{padding:12px 14px 20px}
 #view-nt .section-title{color:var(--nt-deep)}
 #view-nt .section-title::after{background:var(--nt-line)}
 .book-list{display:flex;flex-direction:column;gap:8px}
+.book-item{position:relative}
 .book-row{
   position:relative;background:var(--card);border:1px solid var(--line);
   border-radius:13px;padding:12px 12px 12px 15px;
   display:flex;align-items:center;gap:11px;box-shadow:var(--shadow);
 }
-.book-main{flex:1;min-width:0}
-.book-name{font-size:1.08rem;font-weight:700;line-height:1.3;display:flex;align-items:center;gap:6px}
+.book-item.open .book-row{border-radius:13px 13px 0 0}
+.book-main{flex:1;min-width:0;cursor:pointer}
+.book-name{font-size:1.08rem;font-weight:700;line-height:1.3;display:flex;align-items:center;gap:7px}
+.caret{flex:none;transition:transform .2s;opacity:.55}
+.book-item.open .caret{transform:rotate(180deg)}
 .book-total{font-size:.8rem;color:var(--ink-soft);margin-top:3px;letter-spacing:.02em;font-family:'Noto Sans KR',sans-serif;font-weight:500}
 .book-total b{color:var(--num);font-weight:700}
+.book-ch{
+  font-family:'Noto Sans KR',sans-serif;font-size:.78rem;color:var(--lab);
+  margin-top:5px;display:flex;align-items:center;gap:8px;font-weight:600;
+}
+.mini-track{flex:1;max-width:110px;height:7px;background:var(--bg-deep);border-radius:4px;overflow:hidden}
+.mini-fill{height:100%;border-radius:4px}
+.t-ot .mini-fill{background:var(--ot)}
+.t-nt .mini-fill{background:var(--nt)}
 .chip-year{
   min-width:56px;text-align:center;border-radius:11px;padding:9px 7px;
   font-size:1.05rem;font-weight:700;line-height:1;
@@ -152,21 +188,54 @@ main{padding:12px 14px 20px}
   background:var(--card);color:var(--ink-soft);transition:transform .1s;
 }
 .btn-minus:active{transform:scale(.9)}
-.book-row.t-ot .btn-minus{border:1.5px solid var(--ot-line)}
-.book-row.t-nt .btn-minus{border:1.5px solid var(--nt-line)}
+.t-ot .btn-minus{border:1.5px solid var(--ot-line)}
+.t-nt .btn-minus{border:1.5px solid var(--nt-line)}
 /* 구약 톤 */
-.book-row.t-ot{border-color:var(--ot-line)}
-.book-row.t-ot .chip-year{background:var(--ot-soft);border:1px solid var(--ot-line);color:var(--num)}
-.book-row.t-ot .btn-plus{background:var(--ot);box-shadow:0 2px 6px rgba(168,134,44,.28)}
-.book-row.t-ot.reading{background:#FDF8E7;border-color:var(--ot)}
+.t-ot .book-row{border-color:var(--ot-line)}
+.t-ot .chip-year{background:var(--ot-soft);border:1px solid var(--ot-line);color:var(--num)}
+.t-ot .btn-plus{background:var(--ot);box-shadow:0 2px 6px rgba(168,134,44,.28)}
 /* 신약 톤 */
-.book-row.t-nt{border-color:var(--nt-line)}
-.book-row.t-nt .chip-year{background:var(--nt-soft);border:1px solid var(--nt-line);color:var(--num)}
-.book-row.t-nt .btn-plus{background:var(--nt);box-shadow:0 2px 6px rgba(78,124,165,.28)}
-.book-row.t-nt.reading{background:#F2F7FC;border-color:var(--nt)}
-.ribbon{position:absolute;top:-1px;right:70px;width:20px;height:34px;filter:drop-shadow(0 2px 2px rgba(68,59,45,.25))}
+.t-nt .book-row{border-color:var(--nt-line)}
+.t-nt .chip-year{background:var(--nt-soft);border:1px solid var(--nt-line);color:var(--num)}
+.t-nt .btn-plus{background:var(--nt);box-shadow:0 2px 6px rgba(78,124,165,.28)}
 .pulse{animation:pop .35s ease}
 @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+
+/* ---------- 장 바둑판 ---------- */
+.ch-panel{
+  background:var(--card);border:1px solid var(--line);border-top:none;
+  border-radius:0 0 13px 13px;padding:13px 13px 14px;box-shadow:var(--shadow);
+  display:none;
+}
+.book-item.open .ch-panel{display:block}
+.t-ot .ch-panel{border-color:var(--ot-line)}
+.t-nt .ch-panel{border-color:var(--nt-line)}
+.ch-head{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:'Noto Sans KR',sans-serif;font-size:.84rem;color:var(--lab);
+  font-weight:600;margin-bottom:11px;gap:10px;
+}
+.ch-head b{color:var(--num)}
+.ch-clear{
+  color:var(--ink-soft);font-size:.76rem;text-decoration:underline;
+  cursor:pointer;font-weight:500;flex:none;background:none;border:none;
+  font-family:'Noto Sans KR',sans-serif;padding:4px;
+}
+.ch-clear.armed{color:#8A4326;font-weight:700}
+.ch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:7px}
+.ch{
+  height:42px;border-radius:10px;border:1px solid var(--line);background:var(--bg);
+  font-family:'Noto Sans KR',sans-serif;font-size:.92rem;font-weight:600;
+  color:var(--ink-soft);cursor:pointer;transition:transform .08s;
+}
+.ch:active{transform:scale(.92)}
+.t-ot .ch.on{background:var(--ot);border-color:var(--ot);color:#fff}
+.t-nt .ch.on{background:var(--nt);border-color:var(--nt);color:#fff}
+.ch.next{border:2px solid var(--num);color:var(--num);font-weight:700}
+.ch-hint{
+  font-family:'Noto Sans KR',sans-serif;font-size:.73rem;color:var(--ink-soft);
+  margin-top:10px;text-align:center;line-height:1.6;
+}
 
 /* ---------- stats ---------- */
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
@@ -195,7 +264,7 @@ main{padding:12px 14px 20px}
 .bar-row .bn{width:70px;text-align:right;font-weight:700;color:var(--lab);flex:none;font-size:.82rem}
 .prog-wrap{margin-top:9px}
 .prog-label{display:flex;justify-content:space-between;font-size:.85rem;color:var(--lab);margin-bottom:5px;font-family:'Noto Sans KR',sans-serif;font-weight:600}
-.prog-label b.ot-c,.prog-label b.nt-c{color:var(--num)}
+.prog-label b{color:var(--num)}
 .prog-track{height:15px;background:var(--bg-deep);border-radius:8px;overflow:hidden}
 .prog-fill{height:100%;border-radius:8px;min-width:2px;transition:width .5s}
 .prog-fill.f-ot{background:linear-gradient(90deg,#E8D28A,var(--ot))}
@@ -245,9 +314,15 @@ main{padding:12px 14px 20px}
   background:var(--card);border-radius:17px;padding:24px 20px;
   max-width:350px;width:100%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.25);
 }
-.modal .wheat{width:64px;height:64px;margin:0 auto 8px;display:block}
-.modal h2{font-size:1.2rem;margin-bottom:9px;letter-spacing:.1em}
+.modal .m-art{width:64px;height:64px;margin:0 auto 8px;display:block}
+.modal h2{font-size:1.2rem;margin-bottom:9px;letter-spacing:.08em}
 .modal p{font-size:.9rem;color:var(--ink-soft);line-height:1.7;margin-bottom:17px}
+.name-input{
+  width:100%;padding:13px;border:1.5px solid var(--line);border-radius:11px;
+  font-family:'Gowun Batang',serif;font-size:1.1rem;text-align:center;
+  margin-bottom:15px;background:var(--bg);color:var(--ink);outline:none;
+}
+.name-input:focus{border-color:var(--accent)}
 #toast{
   position:fixed;left:50%;bottom:100px;transform:translateX(-50%) translateY(20px);
   background:var(--ink);color:#FAF7F0;padding:11px 19px;border-radius:23px;
@@ -268,33 +343,34 @@ input[type=file]{display:none}
       <div id="heartLayer" class="heart-layer"></div>
     </div>
   </div>
-  <h1>소명의 성경 읽기표</h1>
+  <h1 id="appTitle">소명의 성경 읽기표</h1>
   <div class="subtitle">말씀은 영의 양식</div>
-  <div class="year-line"><b class="y-c" id="hYear">2026</b>년 · 올해 구약 <b class="ot-c" id="hOt">0</b>독 · 신약 <b class="nt-c" id="hNt">0</b>독</div>
+  <div class="year-line"><b id="hYear">2026</b>년 · 올해 구약 <b id="hOt">0</b>독 · 신약 <b id="hNt">0</b>독</div>
 </header>
 
 <div class="top-banner" id="nyBanner"></div>
 <div class="top-banner alert" id="alertBanner"></div>
 
-<div class="reading-now hidden" id="readingNow">
-  <svg width="28" height="24" viewBox="0 0 26 22" fill="none" stroke="#B5924A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M13 4 C10 1.5 5 1.5 2 3 L2 18 C5 16.5 10 16.5 13 19 C16 16.5 21 16.5 24 18 L24 3 C21 1.5 16 1.5 13 4 Z"/>
-    <path d="M13 4 L13 19"/>
-  </svg>
-  <div>
-    <div class="rn-label">지금 읽는 중</div>
-    <div class="rn-book" id="rnBook"></div>
+<!-- 이어 읽기 -->
+<div class="cont-card hidden" id="contCard">
+  <div class="cont-title">
+    <svg width="22" height="19" viewBox="0 0 26 22" fill="none" stroke="#E0A719" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13 4 C10 1.5 5 1.5 2 3 L2 18 C5 16.5 10 16.5 13 19 C16 16.5 21 16.5 24 18 L24 3 C21 1.5 16 1.5 13 4 Z"/>
+      <path d="M13 4 L13 19"/>
+    </svg>
+    이어 읽기
   </div>
+  <div id="contRows"></div>
 </div>
 
 <main>
   <section class="view on" id="view-ot">
-    <div class="section-title">구약 · 39권</div>
+    <div class="section-title">구약 · 39권 929장</div>
     <div class="book-list" id="list-ot"></div>
   </section>
 
   <section class="view" id="view-nt">
-    <div class="section-title">신약 · 27권</div>
+    <div class="section-title">신약 · 27권 260장</div>
     <div class="book-list" id="list-nt"></div>
   </section>
 
@@ -314,8 +390,14 @@ input[type=file]{display:none}
     </div>
 
     <div class="set-card">
+      <h3>이름</h3>
+      <p>읽기표에 표시되는 이름을 바꿀 수 있어요.</p>
+      <button class="btn" id="btnRename">이름 바꾸기</button>
+    </div>
+
+    <div class="set-card">
       <h3>새해 시작 (해넘김)</h3>
-      <p>올해의 기록을 연도별 기록장에 옮겨 적고, 각 책의 Total에 합산한 뒤 새해를 시작합니다. 한 해가 끝났을 때 한 번만 눌러 주세요.</p>
+      <p>올해의 기록을 연도별 기록장에 옮겨 적고, 각 책의 Total에 합산한 뒤 새해를 시작합니다. 읽는 중이던 장 표시는 그대로 이어집니다.</p>
       <button class="btn primary" id="btnRollover">새해 시작하기</button>
       <button class="btn" id="btnUndoRoll" style="display:none;margin-top:9px">방금 해넘김 되돌리기</button>
     </div>
@@ -329,7 +411,7 @@ input[type=file]{display:none}
     </div>
 
     <div class="set-card" style="text-align:center">
-      <p style="margin:0">소명의 성경 읽기표 v6.0<br>사랑을 담아 만든 통독 기록장</p>
+      <p style="margin:0" id="verLine">성경 읽기표 v2.0<br>사랑을 담아 만든 통독 기록장</p>
     </div>
   </section>
 </main>
@@ -341,9 +423,10 @@ input[type=file]{display:none}
   <button data-v="set">설정</button>
 </nav>
 
+<!-- 해넘김 모달 -->
 <div class="overlay hidden" id="rollModal">
   <div class="modal">
-    <svg class="wheat" viewBox="0 0 64 64" fill="none" stroke="#B5924A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="m-art" viewBox="0 0 64 64" fill="none" stroke="#C29A3A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
       <path d="M32 58 C32 40 32 24 32 12"/>
       <path d="M32 16 C28 14 26 10 27 6 C31 7 33 11 32 16 Z" fill="#EAD27A" fill-opacity=".5"/>
       <path d="M32 16 C36 14 38 10 37 6 C33 7 31 11 32 16 Z" fill="#EAD27A" fill-opacity=".5"/>
@@ -351,13 +434,48 @@ input[type=file]{display:none}
       <path d="M32 26 C37 24 39 19 38 15 C34 16 31 20 32 26 Z" fill="#EAD27A" fill-opacity=".5"/>
       <path d="M32 36 C26 34 24 28 25 24 C30 25 33 29 32 36 Z" fill="#EAD27A" fill-opacity=".5"/>
       <path d="M32 36 C38 34 40 28 39 24 C34 25 31 29 32 36 Z" fill="#EAD27A" fill-opacity=".5"/>
-      <path d="M32 46 C26 45 22 41 22 36 C28 37 32 40 32 46 Z" stroke="#89AECF"/>
-      <path d="M32 46 C38 45 42 41 42 36 C36 37 32 40 32 46 Z" stroke="#89AECF"/>
+      <path d="M32 46 C26 45 22 41 22 36 C28 37 32 40 32 46 Z" stroke="#F7C948"/>
+      <path d="M32 46 C38 45 42 41 42 36 C36 37 32 40 32 46 Z" stroke="#8FB6DA"/>
     </svg>
     <h2 id="rollTitle">새해를 시작할까요?</h2>
     <p id="rollDesc"></p>
     <button class="btn primary" id="rollGo">네, 새해를 시작합니다</button>
     <button class="btn" id="rollCancel">아직이에요</button>
+  </div>
+</div>
+
+<!-- 1독 완료 모달 -->
+<div class="overlay hidden" id="doneModal">
+  <div class="modal">
+    <svg class="m-art" viewBox="0 0 64 64" fill="none" stroke="#E0A719" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="32" cy="32" r="22" stroke="#F7C948"/>
+      <path d="M22 32 L29 39 L43 25" stroke="#C05A1A" stroke-width="3"/>
+      <path d="M12 14 L12 20 M9 17 L15 17"/>
+      <path d="M52 44 L52 50 M49 47 L55 47"/>
+    </svg>
+    <h2 id="doneTitle"></h2>
+    <p id="doneDesc"></p>
+    <button class="btn primary" id="doneGo">1독으로 기록하기</button>
+    <button class="btn" id="doneCancel">아직이에요</button>
+  </div>
+</div>
+
+<!-- 이름 설정 모달 -->
+<div class="overlay hidden" id="nameModal">
+  <div class="modal">
+    <svg class="m-art" viewBox="0 0 64 64" fill="none" stroke="#4A3E2A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M32 20 C26 15 15 15 8 18 L8 46 C15 43 26 43 32 48 C38 43 49 43 56 46 L56 18 C49 15 38 15 32 20 Z" fill="#FFFEF6" stroke="#96865F"/>
+      <path d="M32 20 L32 48" stroke="#96865F"/>
+      <path d="M14 26 C20 24.5 25 24.5 29 26.5" stroke="#D8CCAE"/>
+      <path d="M35 26.5 C39 24.5 44 24.5 50 26" stroke="#D8CCAE"/>
+      <path d="M14 33 C20 31.5 25 31.5 29 33.5" stroke="#D8CCAE"/>
+      <path d="M35 33.5 C39 31.5 44 31.5 50 33" stroke="#D8CCAE"/>
+    </svg>
+    <h2 id="nameTitle">성함을 알려주세요</h2>
+    <p id="nameDesc">읽기표 제목에 이름이 들어갑니다.<br>예) 소명 → 소명의 성경 읽기표</p>
+    <input class="name-input" id="nameInput" maxlength="10" placeholder="이름 입력">
+    <button class="btn primary" id="nameGo">시작하기</button>
+    <button class="btn" id="nameCancel" style="display:none">취소</button>
   </div>
 </div>
 
@@ -371,6 +489,7 @@ const FRAME2='data:image/webp;base64,'+`UklGRnx/AABXRUJQVlA4WAoAAAAQAAAAowEAowEA
 (function(){
   const img=document.getElementById('charImg');
   const layer=document.getElementById('heartLayer');
+  if(!img||!layer) return;
   const pre1=new Image(); pre1.src=FRAME1;
   const pre2=new Image(); pre2.src=FRAME2;
   let flip=false;
@@ -394,54 +513,123 @@ const FRAME2='data:image/webp;base64,'+`UklGRnx/AABXRUJQVlA4WAoAAAAQAAAAowEAowEA
   }
 })();
 
-/* ================= 기준 데이터 (소명 · 2026-08: 신약 마태~고린도후서 각 1독) ================= */
-const BOOKS = [
- ['gen','ot','창세기',0,0],['exo','ot','출애굽기',0,0],['lev','ot','레위기',0,0],
- ['num','ot','민수기',0,0],['deu','ot','신명기',0,0],['jos','ot','여호수아',0,0],
- ['jdg','ot','사사기',0,0],['rut','ot','룻기',0,0],['1sa','ot','사무엘상',0,0],
- ['2sa','ot','사무엘하',0,0],['1ki','ot','열왕기상',0,0],['2ki','ot','열왕기하',0,0],
- ['1ch','ot','역대상',0,0],['2ch','ot','역대하',0,0],['ezr','ot','에스라',0,0],
- ['neh','ot','느헤미야',0,0],['est','ot','에스더',0,0],['job','ot','욥기',0,0],
- ['psa','ot','시편',0,0],['pro','ot','잠언',0,0],['ecc','ot','전도서',0,0],
- ['sng','ot','아가',0,0],['isa','ot','이사야',0,0],['jer','ot','예레미야',0,0],
- ['lam','ot','예레미야애가',0,0],['ezk','ot','에스겔',0,0],['dan','ot','다니엘',0,0],
- ['hos','ot','호세아',0,0],['jol','ot','요엘',0,0],['amo','ot','아모스',0,0],
- ['oba','ot','오바댜',0,0],['jon','ot','요나',0,0],['mic','ot','미가',0,0],
- ['nam','ot','나훔',0,0],['hab','ot','하박국',0,0],['zep','ot','스바냐',0,0],
- ['hag','ot','학개',0,0],['zec','ot','스가랴',0,0],['mal','ot','말라기',0,0],
- ['mat','nt','마태복음',0,1],['mrk','nt','마가복음',0,1],['luk','nt','누가복음',0,1],
- ['jhn','nt','요한복음',0,1],['act','nt','사도행전',0,1],['rom','nt','로마서',0,1],
- ['1co','nt','고린도전서',0,1],['2co','nt','고린도후서',0,1],['gal','nt','갈라디아서',0,0],
- ['eph','nt','에베소서',0,0],['php','nt','빌립보서',0,0],['col','nt','골로새서',0,0],
- ['1th','nt','데살로니가전서',0,0],['2th','nt','데살로니가후서',0,0],['1ti','nt','디모데전서',0,0],
- ['2ti','nt','디모데후서',0,0],['tit','nt','디도서',0,0],['phm','nt','빌레몬서',0,0],
- ['heb','nt','히브리서',0,0],['jas','nt','야고보서',0,0],['1pe','nt','베드로전서',0,0],
- ['2pe','nt','베드로후서',0,0],['1jn','nt','요한일서',0,0],['2jn','nt','요한이서',0,0],
- ['3jn','nt','요한삼서',0,0],['jud','nt','유다서',0,0],['rev','nt','요한계시록',0,0]
+/* ================= 66권 · 장 수 데이터 (구약 929 · 신약 260 · 계 1,189장 검증 완료) ================= */
+const BOOKS=[
+ ['gen','ot','창세기',50],['exo','ot','출애굽기',40],['lev','ot','레위기',27],
+ ['num','ot','민수기',36],['deu','ot','신명기',34],['jos','ot','여호수아',24],
+ ['jdg','ot','사사기',21],['rut','ot','룻기',4],['1sa','ot','사무엘상',31],
+ ['2sa','ot','사무엘하',24],['1ki','ot','열왕기상',22],['2ki','ot','열왕기하',25],
+ ['1ch','ot','역대상',29],['2ch','ot','역대하',36],['ezr','ot','에스라',10],
+ ['neh','ot','느헤미야',13],['est','ot','에스더',10],['job','ot','욥기',42],
+ ['psa','ot','시편',150],['pro','ot','잠언',31],['ecc','ot','전도서',12],
+ ['sng','ot','아가',8],['isa','ot','이사야',66],['jer','ot','예레미야',52],
+ ['lam','ot','예레미야애가',5],['ezk','ot','에스겔',48],['dan','ot','다니엘',12],
+ ['hos','ot','호세아',14],['jol','ot','요엘',3],['amo','ot','아모스',9],
+ ['oba','ot','오바댜',1],['jon','ot','요나',4],['mic','ot','미가',7],
+ ['nam','ot','나훔',3],['hab','ot','하박국',3],['zep','ot','스바냐',3],
+ ['hag','ot','학개',2],['zec','ot','스가랴',14],['mal','ot','말라기',4],
+ ['mat','nt','마태복음',28],['mrk','nt','마가복음',16],['luk','nt','누가복음',24],
+ ['jhn','nt','요한복음',21],['act','nt','사도행전',28],['rom','nt','로마서',16],
+ ['1co','nt','고린도전서',16],['2co','nt','고린도후서',13],['gal','nt','갈라디아서',6],
+ ['eph','nt','에베소서',6],['php','nt','빌립보서',4],['col','nt','골로새서',4],
+ ['1th','nt','데살로니가전서',5],['2th','nt','데살로니가후서',3],['1ti','nt','디모데전서',6],
+ ['2ti','nt','디모데후서',4],['tit','nt','디도서',3],['phm','nt','빌레몬서',1],
+ ['heb','nt','히브리서',13],['jas','nt','야고보서',5],['1pe','nt','베드로전서',5],
+ ['2pe','nt','베드로후서',3],['1jn','nt','요한일서',5],['2jn','nt','요한이서',1],
+ ['3jn','nt','요한삼서',1],['jud','nt','유다서',1],['rev','nt','요한계시록',22]
 ];
-const BASE = {}; BOOKS.forEach(b=>BASE[b[0]]={t:b[3],y:b[4]});
+const CH={}, NAME={}, TST={};
+BOOKS.forEach(b=>{CH[b[0]]=b[3]; NAME[b[0]]=b[2]; TST[b[0]]=b[1];});
 const OT_IDS=BOOKS.filter(b=>b[1]==='ot').map(b=>b[0]);
 const NT_IDS=BOOKS.filter(b=>b[1]==='nt').map(b=>b[0]);
-const KEY='bible_tally_somyeong_v1';
+/* 배포 주소마다 저장 공간을 자동 분리 (같은 도메인의 다른 읽기표와 절대 안 섞임).
+   파일로 직접 열었을 때는 주소가 매번 달라지므로 고정 키를 사용해 기록이 이어지게 함 */
+const HTTPISH=(location.protocol==='https:'||location.protocol==='http:');
+const KEY='bible_v2_'+(HTTPISH? location.pathname.replace(/[^a-zA-Z0-9]/g,'_').slice(-40) : 'local');
+/* 저장 가능 여부 자가진단 (미리보기·시크릿 모드 등 저장이 막힌 화면 감지) */
+let storageOK=true;
+try{ localStorage.setItem(KEY+'_probe','1'); localStorage.removeItem(KEY+'_probe'); }
+catch(e){ storageOK=false; }
+const PRESET_OWNER='소명';
+function storageWarn(){
+  const bn=document.querySelector('#alertBanner');
+  if(bn){
+    bn.innerHTML='이 화면에서는 기록이 <b>저장되지 않습니다.</b> 문서 미리보기가 아닌, 설치한 앱 아이콘이나 크롬·사파리 주소로 열어 주세요.';
+    bn.style.display='block';
+  }
+}
 
 /* ================= 상태 ================= */
-let S = load();
 function freshState(){
-  const total={}, year={};
-  BOOKS.forEach(b=>{ total[b[0]]=b[3]; year[b[0]]=b[4]; });
-  return { ver:4, yearLabel:2026, total, year, archive:{}, reading:null, bigText:false, snapshot:null };
+  const total={}, year={}, base={};
+  BOOKS.forEach(b=>{ total[b[0]]=0; year[b[0]]=0; base[b[0]]=0; });
+  return { ver:2, owner:PRESET_OWNER, yearLabel:(new Date().getFullYear()), total, year, base, ch:{}, touch:{}, archive:{}, bigText:false, snapshot:null };
 }
+/* base(시작값) 보정: 옛 버전·외부 백업처럼 base가 없는 기록은
+   지금의 Total에서 지나간 해 합계를 뺀 값을 시작값으로 삼아 정합성을 이어감 */
+function ensureBase(s){
+  if(s.base) return s;
+  s.base={};
+  BOOKS.forEach(b=>{
+    const id=b[0];
+    let archived=0;
+    Object.values(s.archive||{}).forEach(y=>{ archived+=(y[id]||0); });
+    s.base[id]=(s.total[id]||0)-archived;
+  });
+  return s;
+}
+/* 예전 버전(권 단위 v1) 기록 자동 이관: 같은 주소에 v2를 덮어씌워도 기록이 이어짐 */
+function migrateLegacy(){
+  try{
+    if(localStorage.getItem(KEY)) return;
+    const cand = location.pathname.indexOf('somyeong')>=0
+      ? ['bible_tally_somyeong_v1','bible_tally_v1']
+      : ['bible_tally_v1','bible_tally_somyeong_v1'];
+    for(const lk of cand){
+      const raw=localStorage.getItem(lk);
+      if(!raw) continue;
+      const s=JSON.parse(raw);
+      if(!s||!s.total||!s.year||!s.archive) continue;
+      const ns=freshState();
+      ns.yearLabel=s.yearLabel||ns.yearLabel;
+      BOOKS.forEach(b=>{const id=b[0];
+        if(typeof s.total[id]==='number') ns.total[id]=s.total[id];
+        if(typeof s.year[id]==='number') ns.year[id]=s.year[id];
+      });
+      ns.archive=s.archive||{};
+      ns.bigText=!!s.bigText;
+      ns.owner=PRESET_OWNER;
+      delete ns.base;      /* 이관된 Total 기준으로 시작값을 다시 계산 */
+      ensureBase(ns);
+      localStorage.setItem(KEY, JSON.stringify(ns));
+      /* 옛 기록은 지우지 않고 그대로 남겨둠 (만일을 위한 보험) */
+      return;
+    }
+  }catch(e){}
+}
+migrateLegacy();
+let S=load();
+let openBook=null;      /* 지금 펼쳐진 책 (저장 안 함) */
+let pendingDone=null;   /* 1독 완료 확인 대기 {id, prev} */
+
 function load(){
   try{
     const raw=localStorage.getItem(KEY);
     if(!raw) return freshState();
     const s=JSON.parse(raw);
     if(!s.total||!s.year||!s.archive) return freshState();
+    if(!s.ch) s.ch={};
+    if(!s.touch) s.touch={};
+    if(s.owner===undefined) s.owner=null;
     if(s.snapshot===undefined) s.snapshot=null;
+    ensureBase(s);
     return s;
   }catch(e){ return freshState(); }
 }
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); }
+  catch(e){ if(storageOK){ storageOK=false; storageWarn(); } }
+}
 
 /* ================= 유틸 ================= */
 const $=q=>document.querySelector(q);
@@ -450,11 +638,19 @@ let toastTimer=null;
 function toast(msg){
   const t=$('#toast'); t.textContent=msg; t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.classList.remove('show'),1900);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
 }
-/* 통독 수 = 그 묶음의 모든 책을 다 읽어야 1독 (가장 적게 읽은 책 기준) */
-function passCount(ids, counts){ return Math.min(...ids.map(id=>counts[id]||0)); }
-function passProgress(ids, counts){
+function chArr(id){ return S.ch[id]||[]; }
+function chSet(id){ return new Set(chArr(id)); }
+function chCount(id){ return chArr(id).length; }
+function nextCh(id){
+  const set=chSet(id);
+  for(let k=1;k<=CH[id];k++){ if(!set.has(k)) return k; }
+  return null;
+}
+/* 통독 수 = 그 묶음의 모든 책을 다 읽어야 1독 */
+function passCount(ids,counts){ return Math.min(...ids.map(id=>counts[id]||0)); }
+function passProgress(ids,counts){
   const p=passCount(ids,counts);
   return ids.filter(id=>(counts[id]||0)>=p+1).length;
 }
@@ -463,19 +659,20 @@ function lifeCounts(){
   return c;
 }
 
-/* ================= 정합성 검사 (조용히 자동 실행) ================= */
+/* ================= 정합성 (조용히 자동) ================= */
 function integrityCheck(){
   const bad=[];
   BOOKS.forEach(b=>{
     const id=b[0];
     let archived=0;
-    Object.values(S.archive).forEach(y=>{ archived += (y[id]||0); });
-    if(S.total[id] !== BASE[id].t + archived) bad.push(b[2]);
+    Object.values(S.archive).forEach(y=>{ archived+=(y[id]||0); });
+    if(S.total[id]!==(S.base[id]||0)+archived) bad.push(b[2]);
   });
   return bad;
 }
 function silentCheck(){
   const bn=$('#alertBanner');
+  if(!storageOK){ storageWarn(); return; }
   const bad=integrityCheck();
   if(bad.length>0){
     bn.innerHTML='기록에 어긋난 부분이 발견되었습니다 ('+bad.slice(0,3).join(', ')+(bad.length>3?' 외':'')+'). 설정에서 백업 파일로 복구해 주세요.';
@@ -483,114 +680,247 @@ function silentCheck(){
   }else bn.style.display='none';
 }
 
-/* ================= 책 목록 렌더 ================= */
-function bookRow(b){
-  const [id,tst,name]=b;
-  const row=document.createElement('div');
-  row.className='book-row t-'+tst+(S.reading===id?' reading':'');
-  row.dataset.id=id;
-  row.innerHTML=
-    (S.reading===id?ribbonSVG():'')+
-    '<div class="book-main">'+
-      '<div class="book-name">'+name+'</div>'+
-      '<div class="book-total">Total <b>'+S.total[id]+'</b>독</div>'+
-    '</div>'+
-    '<div class="chip-year">'+S.year[id]+'<small>올해</small></div>'+
-    '<button class="btn-minus" aria-label="'+name+' 1독 되돌리기">−</button>'+
-    '<button class="btn-plus" aria-label="'+name+' 1독 추가">+</button>';
-  return row;
+/* ================= 이름 ================= */
+function applyOwner(){
+  const t = S.owner ? S.owner+'의 성경 읽기표' : '나의 성경 읽기표';
+  $('#appTitle').textContent=t;
+  document.title=t;
 }
-function ribbonSVG(){
-  return '<svg class="ribbon" viewBox="0 0 20 34"><path d="M2 0 L18 0 L18 30 L10 24 L2 30 Z" fill="#C1502E"/><path d="M2 0 L18 0 L18 30 L10 24 L2 30 Z" fill="none" stroke="#9C3E22" stroke-width="1"/></svg>';
+function openNameModal(first){
+  $('#nameTitle').textContent = first ? '성함을 알려주세요' : '이름 바꾸기';
+  $('#nameDesc').innerHTML = first
+    ? '읽기표 제목에 이름이 들어갑니다.<br>예) 소명 → 소명의 성경 읽기표'
+    : '새 이름을 입력해 주세요.';
+  $('#nameInput').value = S.owner||'';
+  $('#nameCancel').style.display = first ? 'none' : 'inline-block';
+  $('#nameModal').classList.remove('hidden');
+  setTimeout(()=>$('#nameInput').focus(),120);
 }
-function renderLists(){
-  const ot=$('#list-ot'), nt=$('#list-nt');
-  ot.innerHTML=''; nt.innerHTML='';
-  BOOKS.forEach(b=>{ (b[1]==='ot'?ot:nt).appendChild(bookRow(b)); });
-  renderHeader();
-}
+$('#nameGo').addEventListener('click',()=>{
+  const v=$('#nameInput').value.trim();
+  if(!v){ toast('이름을 입력해 주세요'); return; }
+  const first=!S.owner;
+  S.owner=v; save(); applyOwner();
+  $('#nameModal').classList.add('hidden');
+  toast(first? '반갑습니다, '+v+'님' : '이름을 바꿨습니다');
+});
+$('#nameCancel').addEventListener('click',()=>$('#nameModal').classList.add('hidden'));
+$('#nameInput').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#nameGo').click(); });
+$('#btnRename').addEventListener('click',()=>openNameModal(false));
+
+/* ================= 렌더 ================= */
 function renderHeader(){
   $('#hYear').textContent=S.yearLabel;
   $('#hOt').textContent=passCount(OT_IDS,S.year);
   $('#hNt').textContent=passCount(NT_IDS,S.year);
-  const rn=$('#readingNow');
-  if(S.reading){
-    const bk=BOOKS.find(b=>b[0]===S.reading);
-    $('#rnBook').textContent=bk?bk[2]:'';
-    $('#rnBook').style.color = bk&&bk[1]==='ot' ? 'var(--ot-deep)' : 'var(--nt-deep)';
-    rn.classList.remove('hidden');
-  }else rn.classList.add('hidden');
 }
-function refreshRow(id){
-  $$('.book-row[data-id="'+id+'"]').forEach(row=>{
-    const b=BOOKS.find(x=>x[0]===id);
-    const fresh=bookRow(b);
-    row.replaceWith(fresh);
-    fresh.querySelector('.chip-year').classList.add('pulse');
-  });
+function renderContinue(){
+  const card=$('#contCard'), box=$('#contRows');
+  const items=BOOKS
+    .map(b=>b[0])
+    .filter(id=>chCount(id)>0 && chCount(id)<CH[id])
+    .sort((a,b)=>(S.touch[b]||0)-(S.touch[a]||0));
+  if(items.length===0){ card.classList.add('hidden'); box.innerHTML=''; return; }
+  card.classList.remove('hidden');
+  box.innerHTML=items.map(id=>{
+    return '<div class="cont-row" data-id="'+id+'">'+
+      '<span class="cont-book">'+NAME[id]+'</span>'+
+      '<span class="cont-info">'+chCount(id)+'/'+CH[id]+'장 읽음</span>'+
+      '<span class="cont-next n-'+TST[id]+'">다음 '+nextCh(id)+'장</span>'+
+    '</div>';
+  }).join('');
+}
+function chPanelHTML(id){
+  const set=chSet(id), N=CH[id], nx=nextCh(id);
+  let grid='';
+  for(let k=1;k<=N;k++){
+    const cls='ch'+(set.has(k)?' on':'')+(k===nx?' next':'');
+    grid+='<button class="'+cls+'" data-ch="'+k+'">'+k+'</button>';
+  }
+  return '<div class="ch-panel">'+
+    '<div class="ch-head"><span><b>'+chCount(id)+'</b>/'+N+'장 읽음'+(nx?' · 다음 <b>'+nx+'장</b>':'')+'</span>'+
+    '<button class="ch-clear" data-id="'+id+'">표시 지우기</button></div>'+
+    '<div class="ch-grid">'+grid+'</div>'+
+    '<div class="ch-hint">장을 탭해 읽음 표시 · 길게 누르면 1장부터 그 장까지 한꺼번에</div>'+
+  '</div>';
+}
+function bookItemHTML(b){
+  const [id,tst,name]=b;
+  const cnt=chCount(id), N=CH[id];
+  const prog = cnt>0
+    ? '<div class="book-ch"><span>'+cnt+'/'+N+'장</span><span class="mini-track"><span class="mini-fill" style="width:'+(cnt/N*100)+'%"></span></span></div>'
+    : '';
+  const open = openBook===id;
+  return '<div class="book-item t-'+tst+(open?' open':'')+'" data-id="'+id+'">'+
+    '<div class="book-row">'+
+      '<div class="book-main">'+
+        '<div class="book-name">'+name+
+          '<svg class="caret" width="13" height="9" viewBox="0 0 13 9" fill="none" stroke="#96865F" stroke-width="2" stroke-linecap="round"><path d="M1.5 1.5 L6.5 6.5 L11.5 1.5"/></svg>'+
+        '</div>'+
+        '<div class="book-total">Total <b>'+S.total[id]+'</b>독</div>'+prog+
+      '</div>'+
+      '<div class="chip-year">'+S.year[id]+'<small>올해</small></div>'+
+      '<button class="btn-minus" aria-label="'+name+' 1독 되돌리기">−</button>'+
+      '<button class="btn-plus" aria-label="'+name+' 1독 추가">+</button>'+
+    '</div>'+
+    (open?chPanelHTML(id):'')+
+  '</div>';
+}
+function renderLists(){
+  $('#list-ot').innerHTML=BOOKS.filter(b=>b[1]==='ot').map(bookItemHTML).join('');
+  $('#list-nt').innerHTML=BOOKS.filter(b=>b[1]==='nt').map(bookItemHTML).join('');
   renderHeader();
 }
+function refreshAll(){
+  renderLists(); renderContinue(); silentCheck();
+  if($('#view-stats').classList.contains('on')) renderStats();
+}
 
-/* ================= 조작 ================= */
-let pressTimer=null;
-
+/* ================= 조작: +/− ================= */
 document.addEventListener('click',e=>{
   const minus=e.target.closest('.btn-minus');
   if(minus){
-    const id=minus.closest('.book-row').dataset.id;
+    const id=minus.closest('.book-item').dataset.id;
     if(S.year[id]>0){
       S.year[id]--; S.snapshot=null; $('#btnUndoRoll').style.display='none'; save();
-      refreshRow(id); silentCheck();
-      const bk=BOOKS.find(b=>b[0]===id);
-      toast(bk[2]+' 1독 되돌림 · 올해 '+S.year[id]+'독');
-    }else{
-      toast('더 되돌릴 기록이 없습니다');
-    }
+      refreshAll();
+      toast(NAME[id]+' 1독 되돌림 · 올해 '+S.year[id]+'독');
+    }else toast('더 되돌릴 기록이 없습니다');
     return;
   }
   const plus=e.target.closest('.btn-plus');
   if(plus){
-    const id=plus.closest('.book-row').dataset.id;
+    const id=plus.closest('.book-item').dataset.id;
     S.year[id]++; S.snapshot=null; $('#btnUndoRoll').style.display='none'; save();
-    refreshRow(id); silentCheck();
-    const bk=BOOKS.find(b=>b[0]===id);
-    toast(bk[2]+' +1 · 올해 '+S.year[id]+'독');
+    refreshAll();
+    toast(NAME[id]+' +1 · 올해 '+S.year[id]+'독');
     return;
   }
-  const nameEl=e.target.closest('.book-name, .book-total');
-  if(nameEl){
-    const id=nameEl.closest('.book-row').dataset.id;
-    const prev=S.reading;
-    S.reading = (S.reading===id)?null:id;
-    save();
-    if(prev) refreshRow(prev);
-    refreshRow(id);
-    const bk=BOOKS.find(b=>b[0]===id);
-    toast(S.reading? '지금 읽는 중: '+bk[2] : '읽는 중 표시 해제');
+  /* 책 펼치기/접기 */
+  const main=e.target.closest('.book-main');
+  if(main){
+    const id=main.closest('.book-item').dataset.id;
+    openBook = (openBook===id)? null : id;
+    renderLists();
+    return;
+  }
+  /* 이어 읽기 카드 → 해당 책으로 */
+  const cont=e.target.closest('.cont-row');
+  if(cont){
+    goToBook(cont.dataset.id);
+    return;
+  }
+  /* 장 표시 지우기 (두 번 눌러 확정) */
+  const clear=e.target.closest('.ch-clear');
+  if(clear){
+    if(clear.classList.contains('armed')){
+      const id=clear.dataset.id;
+      S.ch[id]=[]; delete S.touch[id]; save();
+      refreshAll();
+      toast(NAME[id]+' 장 표시를 지웠습니다');
+    }else{
+      clear.classList.add('armed');
+      clear.textContent='한 번 더 누르면 지워요';
+      setTimeout(()=>{ clear.classList.remove('armed'); clear.textContent='표시 지우기'; },2500);
+    }
+    return;
+  }
+  /* 장 탭 (길게 누르기가 아니었을 때만) */
+  const chBtn=e.target.closest('.ch');
+  if(chBtn){
+    if(longFired){ longFired=false; return; }
+    const id=chBtn.closest('.book-item').dataset.id;
+    const k=parseInt(chBtn.dataset.ch,10);
+    const prev=chArr(id).slice();
+    const set=chSet(id);
+    if(set.has(k)) set.delete(k); else set.add(k);
+    S.ch[id]=[...set].sort((a,b)=>a-b);
+    S.touch[id]=Date.now();
+    afterChapterChange(id,prev);
   }
 });
 
-/* 길게 눌러 −1 (오조작 방지용 숨김 기능) */
+/* 장 길게 누르기: 1장부터 그 장까지 채우기 */
+let pressTimer=null, longFired=false, pressX=0, pressY=0;
 document.addEventListener('pointerdown',e=>{
-  const chip=e.target.closest('.chip-year');
-  if(!chip) return;
-  const id=chip.closest('.book-row').dataset.id;
+  const chBtn=e.target.closest('.ch');
+  if(!chBtn) return;
+  longFired=false;
+  pressX=e.clientX; pressY=e.clientY;
+  const id=chBtn.closest('.book-item').dataset.id;
+  const k=parseInt(chBtn.dataset.ch,10);
   pressTimer=setTimeout(()=>{
-    if(S.year[id]>0){
-      S.year[id]--; S.snapshot=null; $('#btnUndoRoll').style.display='none'; save();
-      refreshRow(id); silentCheck();
-      const bk=BOOKS.find(b=>b[0]===id);
-      toast(bk[2]+' −1 · 올해 '+S.year[id]+'독');
-      if(navigator.vibrate) navigator.vibrate(30);
-    }
-  },600);
+    longFired=true;
+    /* 길게누르기 직후 따라오는(또는 안 오는) 클릭 처리: 잠시 뒤 자동 해제 */
+    setTimeout(()=>{ longFired=false; },400);
+    const prev=chArr(id).slice();
+    const set=chSet(id);
+    for(let i=1;i<=k;i++) set.add(i);
+    S.ch[id]=[...set].sort((a,b)=>a-b);
+    S.touch[id]=Date.now();
+    if(navigator.vibrate) navigator.vibrate(30);
+    afterChapterChange(id,prev,'1장부터 '+k+'장까지 표시했습니다');
+  },550);
 });
-['pointerup','pointercancel','pointerleave'].forEach(ev=>{
-  document.addEventListener(ev,()=>{ clearTimeout(pressTimer); });
+/* 스크롤하려고 움직이면 길게누르기 취소 (오발 방지) */
+document.addEventListener('pointermove',e=>{
+  if(pressTimer && (Math.abs(e.clientX-pressX)>10 || Math.abs(e.clientY-pressY)>10)){
+    clearTimeout(pressTimer); pressTimer=null;
+  }
+});
+['pointerup','pointercancel'].forEach(ev=>{
+  document.addEventListener(ev,()=>{ clearTimeout(pressTimer); pressTimer=null; });
 });
 document.addEventListener('contextmenu',e=>{
-  if(e.target.closest('.chip-year')) e.preventDefault();
+  if(e.target.closest('.ch')) e.preventDefault();
 });
+
+/* 장 변경 후 처리: 완주 감지 → 1독 확인 */
+function afterChapterChange(id,prev,msg){
+  if(chCount(id)===CH[id]){
+    pendingDone={id, prev};
+    $('#doneTitle').textContent=NAME[id]+' '+CH[id]+'장까지 모두 읽으셨어요!';
+    $('#doneDesc').innerHTML='1독으로 기록하고 장 표시를 새로 시작할까요?<br>기록하면 올해 '+(S.year[id]+1)+'독이 됩니다.';
+    $('#doneModal').classList.remove('hidden');
+    save();
+    refreshAll();
+  }else{
+    save();
+    refreshAll();
+    if(msg) toast(msg);
+  }
+}
+$('#doneGo').addEventListener('click',()=>{
+  if(!pendingDone) return;
+  const id=pendingDone.id;
+  S.year[id]++; S.ch[id]=[]; delete S.touch[id];
+  S.snapshot=null; $('#btnUndoRoll').style.display='none';
+  save(); pendingDone=null;
+  $('#doneModal').classList.add('hidden');
+  refreshAll();
+  toast(NAME[id]+' 1독 완료 · 올해 '+S.year[id]+'독');
+});
+$('#doneCancel').addEventListener('click',()=>{
+  if(pendingDone){
+    S.ch[pendingDone.id]=pendingDone.prev;
+    save(); pendingDone=null;
+    refreshAll();
+  }
+  $('#doneModal').classList.add('hidden');
+});
+
+/* 이어 읽기 → 책으로 이동 */
+function goToBook(id){
+  const tst=TST[id];
+  $$('nav.tabs button').forEach(b=>b.classList.remove('on'));
+  $('nav.tabs button[data-v="'+tst+'"]').classList.add('on');
+  $$('.view').forEach(v=>v.classList.remove('on'));
+  $('#view-'+tst).classList.add('on');
+  openBook=id;
+  renderLists();
+  const el=document.querySelector('.book-item[data-id="'+id+'"]');
+  if(el&&el.scrollIntoView) el.scrollIntoView({behavior:'smooth',block:'center'});
+}
 
 /* ================= 탭 ================= */
 $$('nav.tabs button').forEach(btn=>{
@@ -611,6 +941,9 @@ function renderStats(){
   const otL=passCount(OT_IDS,life), ntL=passCount(NT_IDS,life);
   const bibleL=Math.min(otL,ntL);
   const otProg=passProgress(OT_IDS,S.year), ntProg=passProgress(NT_IDS,S.year);
+
+  /* 올해 장 단위 진행 (읽고 있는 장 포함) */
+  const chDone=BOOKS.reduce((a,b)=>a+chCount(b[0]),0);
 
   let maxV=-1,minV=Infinity;
   BOOKS.forEach(b=>{const v=S.year[b[0]]; if(v>maxV)maxV=v; if(v<minV)minV=v;});
@@ -645,16 +978,17 @@ function renderStats(){
       '<div class="stat-card c-nt"><div class="num">'+ntY+'<small>독</small></div><div class="lab">올해 신약 통독</div></div>'+
       '<div class="stat-card c-ot"><div class="num">'+otL+'<small>독</small></div><div class="lab">평생 구약 통독</div></div>'+
       '<div class="stat-card c-nt"><div class="num">'+ntL+'<small>독</small></div><div class="lab">평생 신약 통독</div></div>'+
-      '<div class="stat-card wide c-gold"><div class="num">'+bibleL+'<small>독</small></div><div class="lab">평생 성경 전권 통독 (구약·신약 모두 완독 기준)</div></div>'+
+      '<div class="stat-card wide"><div class="num">'+bibleL+'<small>독</small></div><div class="lab">평생 성경 전권 통독 (구약·신약 모두 완독 기준)</div></div>'+
     '</div>'+
     (allRead?'<div class="badge-complete">올해 66권 전권 통독 달성!</div>':'')+
+    (chDone>0?'<div class="set-card"><h3>지금 읽는 중</h3><div class="mini-list">읽음 표시된 장 · <b>'+chDone+'장</b> (진행 중인 책은 위 이어 읽기에서 바로)</div></div>':'')+
     '<div class="set-card"><h3>다음 독을 향해</h3>'+
       '<div class="prog-wrap">'+
-        '<div class="prog-label"><span>구약 <b class="ot-c">'+(otY+1)+'독째</b></span><span>'+otProg+' / 39권</span></div>'+
+        '<div class="prog-label"><span>구약 <b>'+(otY+1)+'독째</b></span><span>'+otProg+' / 39권</span></div>'+
         '<div class="prog-track"><div class="prog-fill f-ot" style="width:'+(otProg/39*100)+'%"></div></div>'+
       '</div>'+
       '<div class="prog-wrap">'+
-        '<div class="prog-label"><span>신약 <b class="nt-c">'+(ntY+1)+'독째</b></span><span>'+ntProg+' / 27권</span></div>'+
+        '<div class="prog-label"><span>신약 <b>'+(ntY+1)+'독째</b></span><span>'+ntProg+' / 27권</span></div>'+
         '<div class="prog-track"><div class="prog-fill f-nt" style="width:'+(ntProg/27*100)+'%"></div></div>'+
       '</div>'+
     '</div>'+
@@ -669,33 +1003,34 @@ function renderStats(){
     '</div>';
 }
 
-/* ================= 해넘김 ================= */
+/* ================= 해넘김 (장 표시는 유지) ================= */
 $('#btnRollover').addEventListener('click',()=>{
   const otY=passCount(OT_IDS,S.year), ntY=passCount(NT_IDS,S.year);
   $('#rollTitle').textContent=S.yearLabel+'년을 마무리할까요?';
   $('#rollDesc').innerHTML=
     S.yearLabel+'년 한 해 동안 <b>구약 '+otY+'독 · 신약 '+ntY+'독</b>을 읽으셨습니다.<br>'+
-    '올해 기록을 기록장에 옮겨 적고 각 책의 Total에 더한 뒤,<br>'+(S.yearLabel+1)+'년을 새로 시작합니다.';
+    '올해 기록을 기록장에 옮겨 적고 각 책의 Total에 더한 뒤,<br>'+(S.yearLabel+1)+'년을 새로 시작합니다.<br>읽는 중이던 장 표시는 그대로 이어집니다.';
   $('#rollModal').classList.remove('hidden');
 });
 $('#rollCancel').addEventListener('click',()=>$('#rollModal').classList.add('hidden'));
 $('#rollGo').addEventListener('click',()=>{
-  S.snapshot=JSON.stringify({yearLabel:S.yearLabel,total:S.total,year:S.year,archive:S.archive});
+  S.snapshot=JSON.stringify({yearLabel:S.yearLabel,total:S.total,year:S.year,archive:S.archive,ch:S.ch,touch:S.touch});
   S.archive[S.yearLabel]={...S.year};
   BOOKS.forEach(b=>{ S.total[b[0]]+=S.year[b[0]]; S.year[b[0]]=0; });
   S.yearLabel++;
   save();
   $('#rollModal').classList.add('hidden');
-  renderLists(); silentCheck(); checkNewYear();
+  refreshAll(); checkNewYear();
   $('#btnUndoRoll').style.display='block';
   toast(S.yearLabel+'년이 시작되었습니다');
 });
 $('#btnUndoRoll').addEventListener('click',()=>{
   if(!S.snapshot){ toast('되돌릴 기록이 없습니다'); return; }
-  const snap=JSON.parse(S.snapshot);
-  S.yearLabel=snap.yearLabel; S.total=snap.total; S.year=snap.year; S.archive=snap.archive;
+  const sn=JSON.parse(S.snapshot);
+  S.yearLabel=sn.yearLabel; S.total=sn.total; S.year=sn.year; S.archive=sn.archive;
+  if(sn.ch) S.ch=sn.ch; if(sn.touch) S.touch=sn.touch;
   S.snapshot=null; save();
-  renderLists(); silentCheck(); checkNewYear();
+  refreshAll(); checkNewYear();
   $('#btnUndoRoll').style.display='none';
   toast('해넘김을 되돌렸습니다');
 });
@@ -715,7 +1050,8 @@ $('#btnExport').addEventListener('click',()=>{
   const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
-  a.download='소명의성경읽기표_백업_'+S.yearLabel+'_'+new Date().toISOString().slice(0,10)+'.json';
+  const who=S.owner? S.owner : '나의';
+  a.download=who+'_성경읽기표_백업_'+S.yearLabel+'_'+new Date().toISOString().slice(0,10)+'.json';
   a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),3000);
   toast('백업 파일을 내려받았습니다');
@@ -730,10 +1066,15 @@ $('#fileImport').addEventListener('change',e=>{
       if(!s.total||!s.year||!s.archive||!s.yearLabel) throw new Error('형식');
       const ok=BOOKS.every(b=>typeof s.total[b[0]]==='number'&&typeof s.year[b[0]]==='number');
       if(!ok) throw new Error('책 목록');
+      if(!s.ch) s.ch={};
+      if(!s.touch) s.touch={};
+      if(s.owner===undefined) s.owner=null;
+      if(s.snapshot===undefined) s.snapshot=null;
+      ensureBase(s);
       S=s;
-      if(S.snapshot===undefined) S.snapshot=null;
-      save(); renderLists(); silentCheck(); applyBig(); checkNewYear();
+      save(); applyOwner(); refreshAll(); applyBig(); checkNewYear();
       $('#btnUndoRoll').style.display=S.snapshot?'block':'none';
+      if(!S.owner){ if(PRESET_OWNER){ S.owner=PRESET_OWNER; save(); applyOwner(); } else openNameModal(true); }
       toast('기록을 불러왔습니다');
     }catch(err){
       toast('파일을 읽을 수 없습니다. 백업 파일이 맞는지 확인해 주세요.');
@@ -745,7 +1086,7 @@ $('#fileImport').addEventListener('change',e=>{
 
 /* ================= 큰 글씨 ================= */
 function applyBig(){
-  document.body.classList.toggle('bigtext',!!S.bigText);
+  document.documentElement.classList.toggle('bigtext',!!S.bigText);
   $('#swBig').classList.toggle('on',!!S.bigText);
 }
 $('#swBig').addEventListener('click',()=>{
@@ -753,11 +1094,12 @@ $('#swBig').addEventListener('click',()=>{
 });
 
 /* ================= 시작 ================= */
-renderLists();
-silentCheck();
+applyOwner();
+refreshAll();
 applyBig();
 checkNewYear();
 if(S.snapshot) $('#btnUndoRoll').style.display='block';
+if(!S.owner){ if(PRESET_OWNER){ S.owner=PRESET_OWNER; save(); applyOwner(); } else openNameModal(true); }
 /* PWA: https로 서비스될 때만 조용히 등록 */
 if('serviceWorker' in navigator && location.protocol==='https:'){
   navigator.serviceWorker.register('sw.js').catch(function(){});
