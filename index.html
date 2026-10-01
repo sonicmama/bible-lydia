@@ -290,13 +290,11 @@ main{padding:12px 14px 20px}
 
 .g-bar{display:flex;gap:9px;margin-top:10px;align-items:center}
 .g-bar .btn{margin:0;flex:1}
-.g-chips{display:flex;gap:7px;overflow-x:auto;margin-top:10px;padding-bottom:4px;-webkit-overflow-scrolling:touch}
-.g-chip{
-  flex:none;padding:9px 14px;border-radius:18px;border:1.5px solid var(--line);
-  background:var(--card);color:var(--ink-soft);cursor:pointer;
-  font-family:'Noto Sans KR',sans-serif;font-size:.84rem;font-weight:600;
+.g-filter{
+  flex:0 0 112px;padding:13px 8px;border-radius:12px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);font-family:'Noto Sans KR',sans-serif;
+  font-size:.88rem;font-weight:600;
 }
-.g-chip.on{background:var(--accent);border-color:var(--accent);color:#FFFDF6;font-weight:700}
 .g-card{
   background:var(--card);border:1px solid var(--line);border-radius:13px;
   padding:14px 15px 12px;margin-top:9px;box-shadow:var(--shadow);position:relative;
@@ -488,7 +486,7 @@ input[type=file]{display:none}
     </div>
 
     <div class="set-card" style="text-align:center">
-      <p style="margin:0" id="verLine">성경 읽기표 v3.1<br>사랑을 담아 만든 통독 기록장</p>
+      <p style="margin:0" id="verLine">성경 읽기표 v3.2<br>사랑을 담아 만든 통독 기록장</p>
     </div>
   </section>
 </main>
@@ -1281,6 +1279,7 @@ document.addEventListener('change',e=>{
   else if(e.target.id==='gCh'){ gSyncV(); gSyncPreview(); }
   else if(e.target.id==='gV1'){ gClampV2(); gSyncPreview(); }
   else if(e.target.id==='gV2'){ gClampV2(); gSyncPreview(); }
+  else if(e.target.id==='gFilter'){ gFilterVal=e.target.value; renderGrace(); }
 });
 $('#gCancel').addEventListener('click',()=>{ gOpen=false; $('#graceModal').classList.add('hidden'); });
 $('#gSave').addEventListener('click',()=>{
@@ -1317,13 +1316,12 @@ function renderGrace(){
   const pick=notes[seed%notes.length];
   const used={};
   notes.forEach(n=>{ used[n.bi]=true; });
-  let chips='<div class="g-chips"><button class="g-chip'+(gFilterVal==='all'?' on':'')+'" data-f="all">전체 '+notes.length+'</button>';
+  if(gFilterVal!=='all' && !used[gFilterVal]){ gFilterVal='all'; }
+  let fopts='<option value="all"'+(gFilterVal==='all'?' selected':'')+'>전체 ('+notes.length+')</option>';
   Object.keys(used).map(Number).sort((a,b)=>a-b).forEach(bi=>{
     const cnt=notes.filter(n=>n.bi===bi).length;
-    chips+='<button class="g-chip'+(String(gFilterVal)===String(bi)?' on':'')+'" data-f="'+bi+'">'+BOOKS[bi][2]+' '+cnt+'</button>';
+    fopts+='<option value="'+bi+'"'+(String(gFilterVal)===String(bi)?' selected':'')+'>'+BOOKS[bi][2]+' ('+cnt+')</option>';
   });
-  chips+='</div>';
-  if(gFilterVal!=='all' && !used[gFilterVal]){ gFilterVal='all'; }
   const list=gFilterVal==='all'? notes : notes.filter(n=>String(n.bi)===String(gFilterVal));
   let cards='';
   list.forEach(n=>{
@@ -1343,12 +1341,12 @@ function renderGrace(){
     '</div>'+
     '<div class="g-bar">'+
       '<button class="btn primary" id="btnGraceAdd">말씀 담기</button>'+
-    '</div>'+chips+cards;
+      '<select class="g-filter" id="gFilter">'+fopts+'</select>'+
+    '</div>'+cards;
 }
 document.addEventListener('click',e=>{
   if(e.target.closest('#btnGraceAdd')){ openGrace(); return; }
-  const chip=e.target.closest('.g-chip');
-  if(chip){ gFilterVal=chip.dataset.f; renderGrace(); return; }
+
   const cs=e.target.closest('.ch-grace');
   if(cs){
     const id=cs.dataset.id;
