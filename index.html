@@ -277,6 +277,76 @@ main{padding:12px 14px 20px}
 .dot.d-ot{background:var(--ot)}
 .dot.d-nt{background:var(--nt)}
 
+
+/* ---------- 은혜 노트 ---------- */
+.g-today{
+  background:linear-gradient(135deg,#FFF6D4,#FBE9A6);
+  border:1px solid var(--accent);border-radius:13px;
+  padding:15px 15px 13px;margin-top:10px;box-shadow:var(--shadow);cursor:pointer;
+}
+.g-today .gt-label{font-family:'Noto Sans KR',sans-serif;font-size:.74rem;font-weight:700;color:#9A7410;letter-spacing:.2em;margin-bottom:8px}
+.g-today .gt-text{font-size:1rem;line-height:1.8}
+.g-today .gt-ref{font-family:'Noto Sans KR',sans-serif;font-size:.8rem;font-weight:700;color:var(--num);margin-top:8px;text-align:right}
+.g-today .gt-hint{font-family:'Noto Sans KR',sans-serif;font-size:.68rem;color:#B09A54;margin-top:4px;text-align:right}
+.g-bar{display:flex;gap:9px;margin-top:10px;align-items:center}
+.g-bar .btn{margin:0;flex:1}
+.g-filter{
+  flex:0 0 112px;padding:13px 8px;border-radius:12px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);font-family:'Noto Sans KR',sans-serif;
+  font-size:.88rem;font-weight:600;
+}
+.g-card{
+  background:var(--card);border:1px solid var(--line);border-radius:13px;
+  padding:14px 15px 12px;margin-top:9px;box-shadow:var(--shadow);position:relative;
+}
+.g-ref{font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:.9rem;color:var(--num);margin-bottom:7px;padding-right:50px}
+.g-ref.r-ot{color:var(--ot-deep)}
+.g-ref.r-nt{color:var(--nt-deep)}
+.g-text{font-size:.98rem;line-height:1.85}
+.g-memo{
+  margin-top:10px;padding:9px 12px;border-left:3px solid var(--line);
+  font-family:'Noto Sans KR',sans-serif;font-size:.86rem;line-height:1.7;color:var(--ink);
+  background:var(--bg);border-radius:0 9px 9px 0;white-space:pre-wrap;
+}
+.g-date{font-family:'Noto Sans KR',sans-serif;font-size:.72rem;color:var(--ink-soft);margin-top:9px;text-align:right}
+.g-del{
+  position:absolute;top:11px;right:12px;background:none;border:none;
+  font-family:'Noto Sans KR',sans-serif;font-size:.74rem;color:var(--ink-soft);
+  text-decoration:underline;cursor:pointer;padding:4px;
+}
+.g-del.armed{color:#8A4326;font-weight:700}
+.g-sel{
+  width:100%;padding:12px 10px;border-radius:11px;border:1.5px solid var(--line);
+  background:var(--bg);color:var(--ink);font-family:'Gowun Batang',serif;font-size:1rem;
+  margin-bottom:9px;outline:none;
+}
+.g-sel:focus{border-color:var(--accent)}
+.g-row2{display:flex;gap:8px}
+.g-row2 .g-sel{flex:1}
+.g-vlabel{font-family:'Noto Sans KR',sans-serif;font-size:.74rem;color:var(--ink-soft);align-self:center;flex:none;padding:0 2px 9px}
+.g-preview{
+  background:var(--bg);border:1.5px solid var(--line);border-radius:11px;
+  padding:12px;font-size:.95rem;line-height:1.8;margin-bottom:9px;
+  max-height:170px;overflow-y:auto;text-align:left;
+}
+.g-preview.empty{color:var(--ink-soft);font-family:'Noto Sans KR',sans-serif;font-size:.84rem;text-align:center}
+.g-manual{
+  width:100%;min-height:90px;padding:12px;border:1.5px solid var(--line);border-radius:11px;
+  background:var(--bg);color:var(--ink);font-family:'Gowun Batang',serif;font-size:.98rem;
+  line-height:1.7;margin-bottom:9px;outline:none;resize:vertical;
+}
+.g-memo-in{
+  width:100%;min-height:76px;padding:12px;border:1.5px solid var(--line);border-radius:11px;
+  background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif;font-size:.9rem;
+  line-height:1.7;margin-bottom:13px;outline:none;resize:vertical;
+}
+.g-manual:focus,.g-memo-in:focus{border-color:var(--accent)}
+.g-mlabel{font-family:'Noto Sans KR',sans-serif;font-size:.78rem;font-weight:700;color:var(--lab);text-align:left;margin:2px 2px 6px}
+.ch-grace{
+  color:var(--num);font-size:.76rem;text-decoration:underline;
+  cursor:pointer;font-weight:700;flex:none;background:none;border:none;
+  font-family:'Noto Sans KR',sans-serif;padding:4px;margin-right:2px;
+}
 /* ---------- settings ---------- */
 .set-card{
   background:var(--card);border:1px solid var(--line);border-radius:13px;
@@ -379,6 +449,11 @@ input[type=file]{display:none}
     <div id="statsBody"></div>
   </section>
 
+  <section class="view" id="view-grace">
+    <div class="section-title">은혜 노트</div>
+    <div id="graceBody"></div>
+  </section>
+
   <section class="view" id="view-set">
     <div class="section-title">설정</div>
 
@@ -411,7 +486,7 @@ input[type=file]{display:none}
     </div>
 
     <div class="set-card" style="text-align:center">
-      <p style="margin:0" id="verLine">성경 읽기표 v2.0<br>사랑을 담아 만든 통독 기록장</p>
+      <p style="margin:0" id="verLine">성경 읽기표 v3.0<br>사랑을 담아 만든 통독 기록장</p>
     </div>
   </section>
 </main>
@@ -420,6 +495,7 @@ input[type=file]{display:none}
   <button data-v="ot" class="on">구약</button>
   <button data-v="nt">신약</button>
   <button data-v="stats">기록</button>
+  <button data-v="grace">은혜</button>
   <button data-v="set">설정</button>
 </nav>
 
@@ -476,6 +552,25 @@ input[type=file]{display:none}
     <input class="name-input" id="nameInput" maxlength="10" placeholder="이름 입력">
     <button class="btn primary" id="nameGo">시작하기</button>
     <button class="btn" id="nameCancel" style="display:none">취소</button>
+  </div>
+</div>
+
+<!-- 은혜 담기 모달 -->
+<div class="overlay hidden" id="graceModal">
+  <div class="modal" style="max-width:380px;text-align:left">
+    <h2 style="text-align:center">말씀 담기</h2>
+    <select class="g-sel" id="gBook"></select>
+    <div class="g-row2">
+      <select class="g-sel" id="gCh"></select>
+      <select class="g-sel" id="gV1"></select>
+      <span class="g-vlabel">~</span>
+      <select class="g-sel" id="gV2"></select>
+    </div>
+    <div id="gPreviewWrap"></div>
+    <div class="g-mlabel">나의 묵상 · 생각 (선택)</div>
+    <textarea class="g-memo-in" id="gMemo" placeholder="이 말씀이 와닿은 이유, 오늘의 기도, 떠오른 생각…"></textarea>
+    <button class="btn primary" id="gSave">은혜 노트에 담기</button>
+    <button class="btn" id="gCancel" style="margin-top:9px">닫기</button>
   </div>
 </div>
 
@@ -563,7 +658,7 @@ function storageWarn(){
 function freshState(){
   const total={}, year={}, base={};
   BOOKS.forEach(b=>{ total[b[0]]=0; year[b[0]]=0; base[b[0]]=0; });
-  return { ver:2, owner:PRESET_OWNER, yearLabel:(new Date().getFullYear()), total, year, base, ch:{}, touch:{}, archive:{}, bigText:false, snapshot:null };
+  return { ver:2, owner:PRESET_OWNER, yearLabel:(new Date().getFullYear()), total, year, base, ch:{}, touch:{}, notes:[], archive:{}, bigText:false, snapshot:null };
 }
 /* base(시작값) 보정: 옛 버전·외부 백업처럼 base가 없는 기록은
    지금의 Total에서 지나간 해 합계를 뺀 값을 시작값으로 삼아 정합성을 이어감 */
@@ -620,6 +715,7 @@ function load(){
     if(!s.total||!s.year||!s.archive) return freshState();
     if(!s.ch) s.ch={};
     if(!s.touch) s.touch={};
+    if(!s.notes) s.notes=[];
     if(s.owner===undefined) s.owner=null;
     if(s.snapshot===undefined) s.snapshot=null;
     ensureBase(s);
@@ -739,7 +835,7 @@ function chPanelHTML(id){
   }
   return '<div class="ch-panel">'+
     '<div class="ch-head"><span><b>'+chCount(id)+'</b>/'+N+'장 읽음'+(nx?' · 다음 <b>'+nx+'장</b>':'')+'</span>'+
-    '<button class="ch-clear" data-id="'+id+'">표시 지우기</button></div>'+
+    '<button class="ch-grace" data-id="'+id+'" data-ch="'+(nx||1)+'">말씀 담기</button><button class="ch-clear" data-id="'+id+'">표시 지우기</button></div>'+
     '<div class="ch-grid">'+grid+'</div>'+
     '<div class="ch-hint">장을 탭해 읽음 표시 · 길게 누르면 1장부터 그 장까지 한꺼번에</div>'+
   '</div>';
@@ -930,6 +1026,7 @@ $$('nav.tabs button').forEach(btn=>{
     $$('.view').forEach(v=>v.classList.remove('on'));
     $('#view-'+btn.dataset.v).classList.add('on');
     if(btn.dataset.v==='stats') renderStats();
+    if(btn.dataset.v==='grace') renderGrace();
     window.scrollTo(0,0);
   });
 });
@@ -1068,6 +1165,7 @@ $('#fileImport').addEventListener('change',e=>{
       if(!ok) throw new Error('책 목록');
       if(!s.ch) s.ch={};
       if(!s.touch) s.touch={};
+    if(!s.notes) s.notes=[];
       if(s.owner===undefined) s.owner=null;
       if(s.snapshot===undefined) s.snapshot=null;
       ensureBase(s);
@@ -1092,6 +1190,181 @@ function applyBig(){
 $('#swBig').addEventListener('click',()=>{
   S.bigText=!S.bigText; save(); applyBig();
 });
+
+
+/* ================= 은혜 노트 (개역한글 본문 자동 표시) ================= */
+let BIBLE=null, BIBLE_LOADING=null;
+function loadBible(){
+  if(BIBLE) return Promise.resolve(true);
+  if(BIBLE_LOADING) return BIBLE_LOADING;
+  BIBLE_LOADING=fetch('bible_krv.json')
+    .then(r=>{ if(!r.ok) throw 0; return r.json(); })
+    .then(j=>{
+      if(Array.isArray(j)&&j.length===66){ BIBLE=j; return true; }
+      throw 0;
+    })
+    .catch(()=>{ BIBLE_LOADING=null; return false; });
+  return BIBLE_LOADING;
+}
+function todayStr(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function refStr(n){
+  return NAME[BOOKS[n.bi][0]]+' '+n.c+':'+n.v1+(n.v2>n.v1?'-'+n.v2:'');
+}
+/* ---- 담기 모달 ---- */
+let gOpen=false;
+function gFill(sel,from,to,cur){
+  let h='';
+  for(let i=from;i<=to;i++) h+='<option value="'+i+'"'+(i===cur?' selected':'')+'>'+i+'</option>';
+  sel.innerHTML=h;
+}
+function openGrace(bi,ch){
+  gOpen=true;
+  const gb=$('#gBook');
+  let ot='',nt='';
+  BOOKS.forEach((b,i)=>{
+    const o='<option value="'+i+'"'+(i===(bi||0)?' selected':'')+'>'+b[2]+'</option>';
+    if(b[1]==='ot') ot+=o; else nt+=o;
+  });
+  gb.innerHTML='<optgroup label="구약">'+ot+'</optgroup><optgroup label="신약">'+nt+'</optgroup>';
+  gb.value=String(bi||0);
+  gSyncCh(ch||1);
+  $('#gMemo').value='';
+  $('#graceModal').classList.remove('hidden');
+  loadBible().then(ok=>{ if(gOpen) gSyncPreview(); });
+  gSyncPreview();
+}
+function gBi(){ return parseInt($('#gBook').value,10); }
+function gVerseCount(){
+  const bi=gBi(), c=parseInt($('#gCh').value,10);
+  if(BIBLE) return BIBLE[bi][c-1].length;
+  return 176; /* 데이터 로드 전: 최대 절수(시119)까지 자유 선택 */
+}
+function gSyncCh(cur){
+  const bi=gBi();
+  gFill($('#gCh'),1,CH[BOOKS[bi][0]],cur||1);
+  gSyncV();
+}
+function gSyncV(){
+  const n=gVerseCount();
+  gFill($('#gV1'),1,n,1);
+  gFill($('#gV2'),1,n,1);
+}
+function gClampV2(){
+  const v1=parseInt($('#gV1').value,10), v2=parseInt($('#gV2').value,10);
+  if(v2<v1) $('#gV2').value=String(v1);
+}
+function gVerses(){
+  if(!BIBLE) return null;
+  const bi=gBi(), c=parseInt($('#gCh').value,10);
+  const v1=parseInt($('#gV1').value,10), v2=parseInt($('#gV2').value,10);
+  const arr=BIBLE[bi][c-1].slice(v1-1,v2);
+  if(v2>v1) return arr.map((t,i)=>'('+(v1+i)+') '+t).join(' ');
+  return arr[0]||'';
+}
+function gSyncPreview(){
+  const w=$('#gPreviewWrap');
+  if(BIBLE){
+    const t=gVerses();
+    w.innerHTML='<div class="g-preview">'+t.replace(/</g,'&lt;')+'</div>';
+  }else{
+    w.innerHTML='<div class="g-preview empty">말씀 본문을 불러오는 중이에요…<br>연결이 어려우면 아래에 직접 적어 주세요.</div>'+
+      '<textarea class="g-manual" id="gManual" placeholder="말씀 본문을 직접 적어 주세요"></textarea>';
+  }
+}
+document.addEventListener('change',e=>{
+  if(e.target.id==='gBook'){ gSyncCh(1); gSyncPreview(); }
+  else if(e.target.id==='gCh'){ gSyncV(); gSyncPreview(); }
+  else if(e.target.id==='gV1'){ gClampV2(); gSyncPreview(); }
+  else if(e.target.id==='gV2'){ gClampV2(); gSyncPreview(); }
+});
+$('#gCancel').addEventListener('click',()=>{ gOpen=false; $('#graceModal').classList.add('hidden'); });
+$('#gSave').addEventListener('click',()=>{
+  const bi=gBi(), c=parseInt($('#gCh').value,10);
+  const v1=parseInt($('#gV1').value,10), v2=parseInt($('#gV2').value,10);
+  let txt;
+  if(BIBLE){ txt=gVerses(); }
+  else{
+    const m=$('#gManual');
+    txt=m? m.value.trim():'';
+    if(!txt){ toast('말씀 본문을 적어 주세요'); return; }
+  }
+  if(!S.notes) S.notes=[];
+  S.notes.push({id:Date.now(), bi, c, v1, v2, txt, memo:$('#gMemo').value.trim(), d:todayStr()});
+  save();
+  gOpen=false;
+  $('#graceModal').classList.add('hidden');
+  toast('은혜 노트에 담았습니다');
+  if($('#view-grace').classList.contains('on')) renderGrace();
+});
+/* ---- 목록 ---- */
+let gFilterVal='all';
+function renderGrace(){
+  const box=$('#graceBody');
+  const notes=(S.notes||[]).slice().sort((a,b)=>b.id-a.id);
+  if(notes.length===0){
+    box.innerHTML='<div class="g-bar"><button class="btn primary" id="btnGraceAdd">말씀 담기</button></div>'+
+      '<div class="empty-note">읽다가 마음에 와닿은 말씀을 담아 두세요.<br>지칠 때 꺼내 읽으면 큰 힘이 됩니다.</div>';
+    return;
+  }
+  const pick=notes[Math.floor(Math.random()*notes.length)];
+  const used={};
+  notes.forEach(n=>{ used[n.bi]=true; });
+  let fopts='<option value="all"'+(gFilterVal==='all'?' selected':'')+'>전체 ('+notes.length+')</option>';
+  Object.keys(used).map(Number).sort((a,b)=>a-b).forEach(bi=>{
+    const cnt=notes.filter(n=>n.bi===bi).length;
+    fopts+='<option value="'+bi+'"'+(String(gFilterVal)===String(bi)?' selected':'')+'>'+BOOKS[bi][2]+' ('+cnt+')</option>';
+  });
+  const list=gFilterVal==='all'? notes : notes.filter(n=>String(n.bi)===String(gFilterVal));
+  let cards='';
+  list.forEach(n=>{
+    cards+='<div class="g-card">'+
+      '<div class="g-ref r-'+BOOKS[n.bi][1]+'">'+refStr(n)+'</div>'+
+      '<button class="g-del" data-id="'+n.id+'">지우기</button>'+
+      '<div class="g-text">'+String(n.txt).replace(/</g,'&lt;')+'</div>'+
+      (n.memo?'<div class="g-memo">'+String(n.memo).replace(/</g,'&lt;')+'</div>':'')+
+      '<div class="g-date">'+n.d+'</div>'+
+    '</div>';
+  });
+  box.innerHTML=
+    '<div class="g-today" id="gToday">'+
+      '<div class="gt-label">오늘의 은혜</div>'+
+      '<div class="gt-text">'+String(pick.txt).replace(/</g,'&lt;')+'</div>'+
+      '<div class="gt-ref">'+refStr(pick)+'</div>'+
+      '<div class="gt-hint">탭하면 다른 말씀이 나와요</div>'+
+    '</div>'+
+    '<div class="g-bar">'+
+      '<button class="btn primary" id="btnGraceAdd">말씀 담기</button>'+
+      '<select class="g-filter" id="gFilter">'+fopts+'</select>'+
+    '</div>'+cards;
+}
+document.addEventListener('click',e=>{
+  if(e.target.closest('#btnGraceAdd')){ openGrace(); return; }
+  if(e.target.closest('#gToday')){ renderGrace(); return; }
+  const cs=e.target.closest('.ch-grace');
+  if(cs){
+    const id=cs.dataset.id;
+    const bi=BOOKS.findIndex(b=>b[0]===id);
+    openGrace(bi, parseInt(cs.dataset.ch,10));
+    return;
+  }
+  const del=e.target.closest('.g-del');
+  if(del){
+    if(del.classList.contains('armed')){
+      S.notes=(S.notes||[]).filter(n=>String(n.id)!==String(del.dataset.id));
+      save(); renderGrace(); toast('지웠습니다');
+    }else{
+      del.classList.add('armed'); del.textContent='한 번 더 누르면 지워요';
+      setTimeout(()=>{ del.classList.remove('armed'); del.textContent='지우기'; },2500);
+    }
+  }
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='gFilter'){ gFilterVal=e.target.value; renderGrace(); }
+});
+loadBible();
 
 /* ================= 시작 ================= */
 applyOwner();

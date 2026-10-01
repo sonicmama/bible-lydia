@@ -1,9 +1,9 @@
 const PREFIX='bible-sm-';
 const LEGACY=["somyeong-bible-", "bible-universal-"];
-const CACHE=PREFIX+'v2-3';
+const CACHE=PREFIX+'v3-0';
 const ASSETS=['./index.html','./manifest.json','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{
-  e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS).then(()=>c.add('./bible_krv.json').catch(()=>{}))).then(()=>self.skipWaiting()));
 });
 self.addEventListener('activate',e=>{
   e.waitUntil(caches.keys().then(keys=>Promise.all(
