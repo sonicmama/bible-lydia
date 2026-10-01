@@ -486,7 +486,7 @@ input[type=file]{display:none}
     </div>
 
     <div class="set-card" style="text-align:center">
-      <p style="margin:0" id="verLine">성경 읽기표 v3.2<br>사랑을 담아 만든 통독 기록장</p>
+      <p style="margin:0" id="verLine">성경 읽기표 v3.3<br>사랑을 담아 만든 통독 기록장</p>
     </div>
   </section>
 </main>
@@ -658,7 +658,7 @@ function storageWarn(){
 function freshState(){
   const total={}, year={}, base={};
   BOOKS.forEach(b=>{ total[b[0]]=0; year[b[0]]=0; base[b[0]]=0; });
-  return { ver:2, owner:PRESET_OWNER, yearLabel:(new Date().getFullYear()), total, year, base, ch:{}, touch:{}, notes:[], archive:{}, bigText:false, snapshot:null };
+  return { ver:2, owner:PRESET_OWNER, yearLabel:(new Date().getFullYear()), total, year, base, ch:{}, touch:{}, notes:[], last:null, archive:{}, bigText:false, snapshot:null };
 }
 /* base(시작값) 보정: 옛 버전·외부 백업처럼 base가 없는 기록은
    지금의 Total에서 지나간 해 합계를 뺀 값을 시작값으로 삼아 정합성을 이어감 */
@@ -716,6 +716,7 @@ function load(){
     if(!s.ch) s.ch={};
     if(!s.touch) s.touch={};
     if(!s.notes) s.notes=[];
+    if(s.last===undefined) s.last=null;
     if(s.owner===undefined) s.owner=null;
     if(s.snapshot===undefined) s.snapshot=null;
     ensureBase(s);
@@ -812,13 +813,33 @@ function renderHeader(){
 }
 function renderContinue(){
   const card=$('#contCard'), box=$('#contRows');
-  const items=BOOKS
+  let items=BOOKS
     .map(b=>b[0])
     .filter(id=>chCount(id)>0 && chCount(id)<CH[id])
     .sort((a,b)=>(S.touch[b]||0)-(S.touch[a]||0));
-  if(items.length===0){ card.classList.add('hidden'); box.innerHTML=''; return; }
+  /* 마지막 읽은 위치: 완독 후에도 사라지지 않고 다음 갈 곳을 알려줌 */
+  let lastHtml='';
+  if(S.last && NAME[S.last.id]){
+    const lid=S.last.id;
+    items=items.filter(x=>x!==lid);
+    let nextTxt, gotoId=lid;
+    if(S.last.done){
+      const bi=BOOKS.findIndex(b=>b[0]===lid);
+      const nb=BOOKS[(bi+1)%BOOKS.length];
+      nextTxt='다음 '+nb[2]+' 1장'; gotoId=nb[0];
+    }else{
+      const nx=nextCh(lid);
+      nextTxt=nx? '다음 '+nx+'장' : '완독';
+    }
+    lastHtml='<div class="cont-row" data-id="'+gotoId+'">'+
+      '<span class="cont-book">'+NAME[lid]+'</span>'+
+      '<span class="cont-info">'+(S.last.done?'끝까지 읽음':S.last.ch+'장까지 읽음')+'</span>'+
+      '<span class="cont-next n-'+TST[gotoId]+'">'+nextTxt+'</span>'+
+    '</div>';
+  }
+  if(!lastHtml && items.length===0){ card.classList.add('hidden'); box.innerHTML=''; return; }
   card.classList.remove('hidden');
-  box.innerHTML=items.map(id=>{
+  box.innerHTML=lastHtml+items.map(id=>{
     return '<div class="cont-row" data-id="'+id+'">'+
       '<span class="cont-book">'+NAME[id]+'</span>'+
       '<span class="cont-info">'+chCount(id)+'/'+CH[id]+'장 읽음</span>'+
@@ -932,6 +953,7 @@ document.addEventListener('click',e=>{
     if(set.has(k)) set.delete(k); else set.add(k);
     S.ch[id]=[...set].sort((a,b)=>a-b);
     S.touch[id]=Date.now();
+    if(set.has(k)) S.last={id:id, ch:k, t:Date.now()};
     afterChapterChange(id,prev);
   }
 });
@@ -954,6 +976,7 @@ document.addEventListener('pointerdown',e=>{
     for(let i=1;i<=k;i++) set.add(i);
     S.ch[id]=[...set].sort((a,b)=>a-b);
     S.touch[id]=Date.now();
+    if(set.has(k)) S.last={id:id, ch:k, t:Date.now()};
     if(navigator.vibrate) navigator.vibrate(30);
     afterChapterChange(id,prev,'1장부터 '+k+'장까지 표시했습니다');
   },550);
@@ -989,6 +1012,7 @@ function afterChapterChange(id,prev,msg){
 $('#doneGo').addEventListener('click',()=>{
   if(!pendingDone) return;
   const id=pendingDone.id;
+  S.last={id:id, ch:CH[id], t:Date.now(), done:true};
   S.year[id]++; S.ch[id]=[]; delete S.touch[id];
   S.snapshot=null; $('#btnUndoRoll').style.display='none';
   save(); pendingDone=null;
@@ -1166,6 +1190,7 @@ $('#fileImport').addEventListener('change',e=>{
       if(!s.ch) s.ch={};
       if(!s.touch) s.touch={};
     if(!s.notes) s.notes=[];
+    if(s.last===undefined) s.last=null;
       if(s.owner===undefined) s.owner=null;
       if(s.snapshot===undefined) s.snapshot=null;
       ensureBase(s);
